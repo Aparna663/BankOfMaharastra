@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+  <div class="jumbotron">
+    <div class="container bg-white">
+      <!-- *ngIf="authTypeEnable" -->
+      <div class="row pt-3 ">
+        <div class="col-md-12">
+          <div class="d-block p-3 " *ngIf="authTypeEnable">
+            <div class="row pl-3">
+              <label for="text">Type of Authentication
+                <span style="color: red"> *</span>
+              </label>
+            </div>
+            <label class="radio-inline" *ngIf="authTypeEnable && authResult[0].name === 'BIOMETRIC'">
+              <!-- *ngIf="authResult[0].name === 'BIOMETRIC'" -->
+              <input type="radio" name="optradio" [(ngModel)]="authType" value="THUMB"> BIOMETRIC
+            </label>
+            <label class="radio-inline" *ngIf="authTypeEnable && authResult[1] && authResult[1].name === 'OTP'">
+              <!-- *ngIf="authResult[0].name === 'OTP'" -->
+              <input type="radio" name="optradio" [(ngModel)]="authType" value="OTP"> OTP
+            </label>
+          </div>
+          <!-- with adhar -->
+
+        </div>
+      </div>
+      <div class="row pl-4">
+        <label class="pl-2" for="text">Aadhaar Number
+          <span style="color: red"> *</span>
+        </label>
+      </div>
+      <div class="row pl-3">
+        <div class="col-md-3">
+          <input type="text" name="uidNumber" #uidNumber="ngModel" pattern="[0-9]*" minlength="12" maxlength="12"
+            [(ngModel)]="aadharNum" placeholder="aadhar number" class="form-control text_input2" autocomplete="off"
+            required>
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-4" *ngIf="authType === 'OTP'">
+          <button *ngIf="!otpRequested" class="btn btn-primary" (click)="getOtp(aadharNum)"
+            [disabled]='uidNumber.invalid'>Get OTP</button>
+          <button *ngIf="otpRequested" class="btn btn-primary" (click)="getOtp(aadharNum)"
+            [disabled]="disableResend">Resend</button>
+        </div>
+      </div>
+      <br />
+      <div class="row pl-3" *ngIf="authType=='OTP' && otpRequested">
+        <div class="col-md-4">
+          <input type="text" class="form-control text_input2" placeholder="enter otp" name="otpbyAdhar"
+            #otpbyAdhar="ngModel" [(ngModel)]="otp" minlength="6" maxlength="6" autocomplete="off" required>
+          <span *ngIf="otpRequested && timer > 0" style="font-size:12px;">Your OTP will expire in {{timerText}}
+            secs</span>
+        </div>
+        <!-- <div class="col-md-4">
+                <button (click)="getAuthenticationByOTP()" [disabled]='otpbyAdhar.invalid' class="btn btn-success">Verifynow</button>
+                <button class="btn btn-danger">Cancel</button>
+            </div> -->
+      </div>
+      <div class="row ">
+        <div class="col-md-8">
+          <p style="padding:10px; font-size:11px;">
+            <b>Declaration by Citizen:</b> I, the holder of above Aadhaar Number, hereby give my consent to the
+            Transport
+            Department, Government of Andhra Pradesh to obtain my demographic details through Aadhaar eKYC
+            authentication
+            with UIDAI Only for facilitating the business service sought by me from the Transport Department. The
+            Transport Department, Government of Andhra Pradesh has informed me that my demographic details will be
+            used Only for facilitating the business service sought by me from Transport department and details will
+            not be shared. The Transport Department, has also informed me that my biometrics will neither be stored
+            nor shared and will be submitted to CIDR,UIDAI only for the purpose of authentication. I agree to share
+            my contact information viz; mobile number and email given in the Aadhaar with Transport department,
+            Government
+            of AP for the purposes of sending me alerts and notiﬁcations related to the status of the business service
+            sought by me and notiﬁcations for violating the business service rules and conditions. The Transport
+            Department has informed me the above contact information will neither be shared nor displayed.
+          </p>
+          <hr>
+        </div>
+
+        <div class="col-md-3" *ngIf="authType ==='THUMB'">
+          <div *ngIf="!thumbScanned"><img src="/assets/finger-printoutline.png"></div>
+          <div *ngIf="thumbScanned"><img src="/assets/finger-print-scan.png"></div>
+          <div class="form-group">
+            <label for="deveicetype"></label>
+            <select class="form-control" id="deveicetype" name="deviceName" #deviceName="ngModel"
+              [(ngModel)]="deviceType" [disabled]="!aadharNum" required>
+              <option disabled selected value="undefined">Select Device Type</option>
+              <option value="sec">Secugen</option>
+            </select>
+          </div>
+          <button *ngIf="aadharNum" class="btn btn-primary" [disabled]='deviceName.invalid || scannedfinger'
+            (click)="thumbScan(aadharNum)">Scan Finger</button>
+        </div>
+      </div>
+      <div class="row">
+        <form class="form-group" name="checkForm">
+          <div class="form-group">
+            <div class="col-md-12">
+              <input type="checkbox" id="declaration" class="has-error" name="declaration" [(ngModel)]="consent"
+                required>
+              <label class="checkbox" style="display: contents;" for="declaration" (click)="agree()"> I Agree </label>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="row" *ngIf="otpRequested || thumbScanned">
+        <div class="form-group">
+          <img src="data:image/jpg;base64,{{capchaEncodedImg}}" alt="refresh" class="captcha" />
+          <img style="cursor: pointer; width: 15px" (click)="getCaptcha()" src="/assets/refresh.png">
+        </div>
+      </div>
+      <div class="row" *ngIf="otpRequested || thumbScanned">
+        <div class="form-group">
+          <label for="captchVal">Enter Captcha<span style="color: red"> *</span></label>
+          <input type="text" id="captchVal" name="inputCaptcha" [(ngModel)]="captchaValue" #inputCaptcha="ngModel"
+            autocomplete="off" minlength="6" maxlenghth="6" required>
+          <button type="button" *ngIf="!permitsBtnEnable && !variationOfPermitBtnEnable" class="btn btn-primary"
+            [disabled]="!consent &&  (!(scannedflag && captchaValue) || !(otpflag && captchaValue && otp))"
+            (click)="getAadharDetails()">Submit</button>
+          <button type="button" *ngIf="permitsBtnEnable" class="btn btn-primary"
+            [disabled]="!consent &&  (!(scannedflag && captchaValue) || !(otpflag && captchaValue && otp))"
+            (click)="getPermitsAadharDetails()">Submit</button>
+          <button type="button" *ngIf="variationOfPermitBtnEnable" class="btn btn-primary"
+            [disabled]="!consent &&  (!(scannedflag && captchaValue) || !(otpflag && captchaValue && otp))"
+            (click)="getVariationOfPermitsAadharDetails()">Submit</button>
+          <div *ngIf="inputCaptcha.invalid && (inputCaptcha.dirty || inputCaptcha.touched)" class="text-danger">
+            <div *ngIf="inputCaptcha.errors.required" style="margin-left: 76px;font-size: 10px;font-weight: bold;">
+              Please Enter Captcha
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="loadingicon" class="d-flex justify-content-center">
+        <div class="spinner-border text-danger spinner-border-lg" style="width: 3rem; height: 3rem" role="status"
+          style="margin-right: 35%;margin-top: -31px;">
+          <span class="sr-only" id="loading"></span>
+        </div>
+      </div>
+      <div class="row" *ngIf="captchaErrorMsg">
+        <span style="color: red"> {{captchaErrorMsg}}</span>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

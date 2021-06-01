@@ -1,0 +1,469 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<body class="body" style="background-color: #eeeeee73;margin-top: -23px;">
+  <img src="/assets/background.jpg">
+  <div id="throbber" style="display:none; min-height:120px;"></div>
+  <div id="noty-holder" style="margin-top: -54px;"></div>
+
+  <div id="wrapper">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <i class="fa fa-bars" aria-hidden="true" style="color: white;"></i>
+        </button>
+        <div class="navbar-brand">
+        </div>
+      </div>
+
+      <form action="" class="navbar-form navbar-left">
+
+      </form>
+
+      <!-- Top Menu Items -->
+      <div class="items">
+        <img src="/assets/logo.jpg" style="height: 70px;width: 100px;float: left;">
+      </div>
+
+      <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+      <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav side-nav">
+
+
+
+          <div class="panel-group" id="accordion">
+
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
+                    (click)="bakToBankDetails()"><span class="glyphicon glyphicon-th">
+                    </span>Report Name</a>
+                </h4>
+              </div>
+              <div id="collapseTwo" class="panel-collapse collapse">
+                <div class="panel-body">
+                  <table class="table" style=" margin-top: 0px;">
+                    <tr>
+                      <td class="heading" style="cursor: pointer;" [ngClass]="{activetab: isActive(1)}" (click)="tabsBtn()">
+                        <a (click)="tabsBtn()">RBI207_Special Fortnightly Return-VI-AB</a>
+                      </td>
+                    </tr>
+                   
+                    <tr>
+                      <td class="heading">
+                        <a (click)="tabsBtn()">Tab 2</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="heading">
+                        <a (click)="tabsBtn()">Tab 3</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="heading">
+                        <a (click)="tabsBtn()">Tab 4</a>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+
+
+
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+
+
+    <div class="container-fluid" style="margin-top: 62px;">
+      <div class="row text-center">
+        <div class="col-md-12 col-lg-12 dashhead">
+          <h1>
+            <marquee behavior="scroll" direction="left" style="color: #119292;">Welcome To Bank Of Maharastra</marquee>
+            <div class="col-2"> <button class="btn btn-secondary" (click)="excel()" type="button"
+              id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+            Excel            </button> </div> 
+          </h1>
+          <main class="col-md-12 ml-sm-auto col-lg-12 px-md-4 py-4">
+
+            <div class="row" *ngIf="tabsEnable">
+              <div class="col-3"> <button class="btn btn-secondary" (click)="interestRatedAllLoans()" type="button"
+                  id="dropdownMenuButton">
+                  Interest Rates On All Loans
+                </button> </div>
+              <div class="col-2"> <button class="btn btn-secondary" (click)="domSavingsDeposits()" type="button"
+                  id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                  I.R On DOM savings Deposits
+                </button> </div>
+              <div class="col-3"> <button class="btn btn-secondary" style="margin-right: -69px;"
+                  (click)="domesticTermDeposits()" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                  aria-expanded="false">
+                  I.R On Domestic Term Deposits
+                </button> </div>
+              <div class="col-2"> <button class="btn btn-secondary" (click)="NRIDeposits()" type="button"
+                  id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                  NRI Deposits
+                </button> </div>
+              <div class="col-2"> <button class="btn btn-secondary" (click)="ForeignCurrencyExpCreditEnable()"
+                  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                  Foreign Currency Exp Credit
+                </button> </div>
+            </div>
+            <div class="row" *ngIf="interestRatedAllLoansEnable || domSavingsDepositsEnable || domesticTermDepositsEnable || NRIDepositsEnable || foreignCurrencyExpCreditEnable">
+              <div class=col-lg-11></div>
+              <div class="col-1">
+                <a download href="assets/RBI207_Special Fortnightly Return-VI-AB.pdf"> <button class="btn btn-secondary"
+                    style="background: #83aed4;margin-top: 30px;" (click)="download()" type="button"
+                    id="dropdownMenuButton">
+                    Download
+                  </button> </a>
+              </div>
+            </div>
+            <div *ngIf="interestRatedAllLoansEnable">
+              <table class="table table-striped" *ngIf="enableTable1 && !enableTable2">
+                <thead>
+                  <tr>
+                    <th scope="col">S.No</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Interest Range</th>
+                    <th scope="col">min_max</th>
+                    <th scope="col">col_num</th>
+                    <th scope="col">value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let aData of finalObj.A; index as i">
+                    <td>{{aData.SNo}}</td>
+                    <td class="link" style="text-decoration: underline;cursor: pointer;color:#09af2f !important;"> <a
+                        style="color:#09af2f !important" (click)='getItems(aData)' (click)="popup = true">{{aData.Item}} </a></td>
+                    <!-- <a (click)='getItems(aData.Item)'>  <td  class="link" style="text-decoration: underline"
+     {{aData.Item}} ></td> </a> -->
+                    <td>{{aData.InterestRange}}</td>
+                    <td>{{aData.min_max}}</td>
+                    <td>{{aData.col_num}}</td>
+                    <td>{{aData.value}}</td>
+                  </tr>
+
+                </tbody>
+              </table>
+              
+               
+                    <div class="content">
+                      <table class="table" *ngIf="enableTable2 && !enableTable1 && !enableTable9">
+                        <thead>
+                          <tr>
+                            <th scope="col">S.No</th>
+                            <th> Item </th>
+                            
+                            <th scope="col">Interest Range</th>
+                            <th scope="col">min_max</th>
+                            <th scope="col">col_num</th>
+                            <th scope="col">value</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let cData of childData; index as i">
+                            <td>{{cData.SNo}}</td>
+                            
+                            <td class="link" style="text-decoration: underline;cursor: pointer;color:#09af2f !important;"> <a
+                              style="color:#09af2f !important" (click)='getchildDetails(aData)'>{{cData.Item}} </a></td>
+                            <!-- <a (click)='getItems(aData.Item)'>  <td  class="link" style="text-decoration: underline"
+             {{aData.Item}} ></td> </a> -->
+                            <td>{{cData.InterestRange}}</td>
+                            <td>{{cData.min_max}}</td>
+                            <td>{{cData.col_num}}</td>
+                            <td>{{cData.value}}</td>
+                          </tr>
+        
+                        </tbody>
+                      </table>
+                    </div>
+              
+            
+            <div class="content">
+              <table class="table" *ngIf="enableTable9">
+                <thead>
+                  <tr>
+                   
+        
+                    <th scope="col">Customer ID</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Key1</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let cData of childDetails.Sheet1; index as i">
+                   
+                    <td>{{cData.cust_id}}</td>
+                    <td>{{cData.item}}</td>
+                    <!-- <a (click)='getItems(aData.Item)'>  <td  class="link" style="text-decoration: underline"
+     {{aData.Item}} ></td> </a> -->
+                    <td>{{cData.amount}}</td>
+                    <td>{{cData.Key1}}</td>
+                    
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+            </div>
+            <div *ngIf="domSavingsDepositsEnable">
+              <table class="table table-striped" *ngIf="enableTable3 && !enableTable4">
+                <thead>
+                  <tr>
+                    <th scope="col">Buckets</th>
+                    <th scope="col">Interest Range</th>
+                    <th scope="col">min_max</th>
+                    <th scope="col">value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let aData of DOMSavingsObj.DomSavingsDeposits; index as i">
+
+                    <td class="link" style="text-decoration: underline;cursor: pointer;color:#09af2f !important;"> <a
+                        style="color:#09af2f !important" (click)='getDomSavingsItems(aData)'>{{aData.Buckets}} </a></td>
+                    <!-- <a (click)='getItems(aData.Item)'>  <td  class="link" style="text-decoration: underline"
+     {{aData.Item}} ></td> </a> -->
+                    <td>{{aData.InterestRange}}</td>
+                    <td>{{aData.min_max}}</td>
+                    <td>{{aData.value}}</td>
+                  </tr>
+
+                </tbody>
+              </table>
+              <table class="table" *ngIf="enableTable4 && !enableTable3">
+                <thead>
+                  <tr>
+                    <th scope="col">Buckets</th>
+                    <th scope="col">Interest Range</th>
+                    <th scope="col">min_max</th>
+                    <th scope="col">value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let cData of childData; index as i">
+
+                    <td>{{cData.Buckets}}</td>
+                    <td>{{cData.InterestRange}}</td>
+                    <td>{{cData.min_max}}</td>
+                    <td>{{cData.value}}</td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+            <div *ngIf="domesticTermDepositsEnable">
+              <table class="table table-striped" *ngIf="enableTable5 && !enableTable6">
+                <thead>
+                  <tr>
+                    <th scope="col">Domestic Term Deposits</th>
+                    <th scope="col">Type1</th>
+                    <th scope="col">Type2</th>
+                    <th scope="col">Amount Outstanding</th>
+                    <th scope="col">Rate Of Interest(%)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let aData of domesticTermDepositsObj.DomesticTermDeposit; index as i">
+
+                    <td class="link" style="text-decoration: underline;cursor: pointer;color:#09af2f !important;"> <a
+                        style="color:#09af2f !important"
+                        (click)='getDomesticTermItems(aData)'>{{aData.DomesticTermDeposits}} </a></td>
+                    <!-- <a (click)='getItems(aData.Item)'>  <td  class="link" style="text-decoration: underline"
+     {{aData.Item}} ></td> </a> -->
+                    <td>{{aData.Type1}}</td>
+                    <td>{{aData.Type2}}</td>
+                    <td>{{aData.AmountOutstanding}}</td>
+                    <td>{{aData.RateofInterest}} <span>(%)</span></td>
+                  </tr>
+
+                </tbody>
+              </table>
+              <table class="table" *ngIf="enableTable6 && !enableTable5">
+                <thead>
+                  <tr>
+                    <th scope="col">Domestic Term Deposits</th>
+                    <th scope="col">Type1</th>
+                    <th scope="col">Type2</th>
+                    <th scope="col">Amount Outstanding</th>
+                    <th scope="col">Rate Of Interest(%)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let cData of childData; index as i">
+
+                    <td>{{cData.DomesticTermDeposits}}</td>
+                    <td>{{cData.Type1}}</td>
+                    <td>{{cData.Type2}}</td>
+                    <td>{{cData.AmountOutstanding}}</td>
+                    <td>{{cData.RateofInterest}}<span>(%)</span></td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+            <div *ngIf="NRIDepositsEnable">
+              <table class="table table-striped" *ngIf="enableTable7">
+                <thead>
+                  <tr>
+                    <th scope="col">Items</th>
+
+                    <th scope="col">USD</th>
+                    <th scope="col">GBP</th>
+                    <th scope="col">MAX</th>
+                    <th scope="col">CAD</th>
+                    <th scope="col">EUR</th>
+                    <th scope="col">Interest Rate</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let aData of nriDepositsObj.NRIDeposits; index as i">
+
+
+                    <td>{{aData.Items}}</td>
+
+                    <td>{{aData.USD}}</td>
+                    <td>{{aData.GBP}}</td>
+                    <td>{{aData.MAX}}</td>
+                    <td>{{aData.CAD}}</td>
+                    <td>{{aData.EUR}}</td>
+                    <td>{{aData.InterestRate}}</td>
+                  </tr>
+
+                </tbody>
+              </table>
+
+            </div>
+            <div *ngIf="foreignCurrencyExpCreditEnable">
+              <table class="table table-striped" *ngIf="enableTable8">
+                <thead>
+                  <tr>
+                    <th scope="col">Items</th>
+                    <th scope="col">Amount Outstanding (Rs. Crore)</th>
+                    <th scope="col">Effective Date 17.02.2012 Rate of Interest</th>
+                    <th scope="col">USD</th>
+                    <th scope="col">GBP</th>
+                    <th scope="col">AUD</th>
+                    <th scope="col">EUR</th>
+                    <th scope="col">Interest Rate</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let aData of nriDepositsObj.NRIDeposits; index as i">
+
+
+                    <td>{{aData.Items}}</td>
+                    <td>{{aData.AmountOutstanding}}</td>
+                    <td>{{aData.EffectiveDateRateofInterest}}</td>
+                    <td>{{aData.USD}}</td>
+                    <td>{{aData.GBP}}</td>
+                    <td>{{aData.AUD}}</td>
+                    <td>{{aData.EUR}}</td>
+                    <td>{{aData.InterestRate}}<span>(Rs. Crore)</span></td>
+                  </tr>
+
+                </tbody>
+              </table>
+
+            </div>
+          </main>
+
+
+
+        
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /#wrapper -->
+  <div class="row" 
+  *ngIf="(interestRatedAllLoansEnable || domSavingsDepositsEnable || domesticTermDepositsEnable || NRIDepositsEnable || foreignCurrencyExpCreditEnable)">
+  <div class=col-lg-10></div>
+  <div class="col-1">
+    <button class="btn btn-secondary" data-toggle="modal" data-target="#myModal" style="background:#35b753"
+      (click)="approved()" type="button" id="dropdownMenuButton">
+      Approved
+    </button>
+  </div>
+  <div class="col-1">
+    <button class="btn btn-secondary" style="background:red" data-toggle="modal" data-target="#myModal"
+      (click)="rejected()" type="button" id="dropdownMenuButton">
+      Rejected
+    </button>
+  </div>
+
+</div>
+<!-- <div class="row" style="margin-top: 291px;"
+  *ngIf="(enableTable2 || enableTable4 || enableTable6) && (interestRatedAllLoansEnable || domSavingsDepositsEnable || domesticTermDepositsEnable || NRIDepositsEnable || foreignCurrencyExpCreditEnable)">
+  <div class=col-lg-10></div>
+  <div class="col-1">
+    <button class="btn btn-secondary" data-toggle="modal" data-target="#myModal" style="background:#35b753"
+      (click)="approved()" type="button" id="dropdownMenuButton">
+      Approved
+    </button>
+  </div>
+  <div class="col-1">
+    <button class="btn btn-secondary" style="background:red" data-toggle="modal" data-target="#myModal"
+      (click)="rejected()" type="button" id="dropdownMenuButton">
+      Rejected
+    </button>
+  </div>
+
+</div> -->
+</body>
+
+
+
+
+<!-- The Modal -->
+<div class="modal" id="myModal" *ngIf="showPopup">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Status</h4>
+        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        {{text}}
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+ 
+ <!-- <div class="overlay" *ngIf="popup">
+     <div class="popup">
+         <h2>Child Data</h2>
+         <a class="close" (click)="popup = false">&times;</a>
+         <div class="content">
+        
+         </div>
+     </div>
+ </div> -->

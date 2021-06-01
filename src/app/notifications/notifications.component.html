@@ -1,0 +1,17 @@
+<div *ngIf="notifications.length" [@notifications]='notifications.length'>
+
+    <div class="card border-danger mb-3" style="z-index: 99">
+        <div class="card-header">
+            Notification <span class="badge badge-danger">{{notifications.length}}</span>
+            <a (click)="notifications =[] ">
+              Clear
+            </a>
+        </div>
+        <div class="card-body text-danger">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" *ngFor="let item of notifications">{{item.error}}</li>
+              </ul>
+        </div>
+      </div>
+   
+</div>
